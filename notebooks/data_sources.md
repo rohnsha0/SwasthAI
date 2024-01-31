@@ -22,7 +22,10 @@ Follow these steps to download data from Kaggle:
 2. Choose a dataset from the list below and execute the corresponding command to download it:
 
     - [pneumonia](https://www.kaggle.com/datasets/paultimothymooney/chest-xray-pneumonia): `kaggle datasets download -d pneumonia`
-    - [tuberculosis](https://www.kaggle.com/datasets/tawsifurrahman/tuberculosis-tb-chest-xray-dataset): `kaggle datasets download -d tuberculosis``
+    - [tuberculosis](https://www.kaggle.com/datasets/tawsifurrahman/tuberculosis-tb-chest-xray-dataset): `kaggle datasets download -d tuberculosis`
+    - [skin_diseases](https://www.kaggle.com/datasets/ascanipek/skin-diseases)
+    - [skin cancer](https://www.kaggle.com/datasets/kmader/skin-cancer-mnist-ham10000)
+    - [multi cancer](https://www.kaggle.com/datasets/obulisainaren/multi-cancer)
 
     Replace `pneumonia`, `tuberculosis`, etc. with the actual names of the variables with the link provided, you want to download.
 
