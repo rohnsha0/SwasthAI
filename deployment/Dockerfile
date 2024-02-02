@@ -1,13 +1,15 @@
-FROM public.ecr.aws/lambda/python:3.10
+FROM python:3.9-slim
 
-COPY functions.py ${LAMBDA_TASK_ROOT}
-COPY requirements.txt ${LAMBDA_TASK_ROOT}
+ENV PYTHONUNBUFFERED True
+
+ENV APP_HOME /app
+WORKDIR $APP_HOME
 
 # Copy function code
-COPY main.py ${LAMBDA_TASK_ROOT}
+COPY . ./
 
 # Install the specified packages
 RUN pip install -r requirements.txt
 
 # Set the CMD to your handler (could also be done as a parameter override outside of the Dockerfile)
-CMD [ "main.handler" ]
+CMD exec uvicorn main:app --host 0.0.0.0 --port 8000 --workers 1
