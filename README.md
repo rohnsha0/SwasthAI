@@ -1,6 +1,6 @@
-# MedBuddyAI API
+# SwasthAI
 
-This repository contains backend code for [MedBuddy AI](https://github.com/rohnsha0/medbuddyAI), android app. The server is powered by FastAPI for performing various server-side tasks like handling chatbot questions, etc. It also includes IPython Notebook files for training the CNN models, dataset handling, and exported models.
+This repository contains backend code for [SwasthAI-android](https://github.com/rohnsha0/medbuddyAI). The server is powered by FastAPI for performing various server-side tasks like handling chatbot questions, etc. It also includes IPython Notebook files for training the CNN models, dataset handling, and exported models.
 
 ## Overview
 
