@@ -14,7 +14,21 @@ instructions = """
         and the output will be displayed to the screen.
         """
 st.write(instructions)
+
 file= st.file_uploader("Upload an image", type=["jpg", "jpeg", "png"])
 if(file):
     st.subheader("Selected Image")
     st.image(Image.open(file).resize((256, 256)), caption="Uploaded Image")
+
+# Sidebar
+st.sidebar.title("Scan Options")
+dropdown_options = ["Lungs", "Brain"]
+with st.sidebar:
+    selected_option = st.selectbox("Select Domain Model:", dropdown_options, index=None, placeholder="Unselected", help="Used for selecting the domain model to be used for scanning the image.")
+if selected_option == "Lungs":
+    st.write("You selected Lungs!")
+elif selected_option == "Brain":
+    st.write("You selected Brain!")
+else:
+    st.write("Selecct a cateogory to proceed!")
+
