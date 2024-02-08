@@ -1,5 +1,12 @@
+import base64
 import streamlit as st
 from PIL import Image
+
+st.set_page_config(
+    page_title="SwasthAI: AI-Powered Health Diagnosis", 
+    page_icon="https://i.postimg.cc/zfjkwzPq/swasth-AILogo.png", 
+    layout="wide", 
+    initial_sidebar_state="expanded")
 
 hide_decoration_bar_style = '''<style>header {visibility: hidden;}</style>'''
 st.markdown(hide_decoration_bar_style, unsafe_allow_html=True)
