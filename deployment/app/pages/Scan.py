@@ -28,11 +28,20 @@ dropdown_options = ["Lungs", "Brain"]
 st.subheader("Image Upload")
 file= st.file_uploader("Upload an image", type=["jpg", "jpeg", "png"])
 if(file):
+        isPredicting= False
         col1, col2 = st.columns(2)
         with col1:
             st.image(Image.open(file).resize((256, 256)))
         with col2:
                 selected_option = st.selectbox("Select Domain Model:", dropdown_options, index=None, placeholder="Unselected", help="Used for selecting the domain model to be used for scanning the image.")
-                st.button("Scan", "https://docs.streamlit.io/library/api-reference/widgets/st.button")
+                isPredicting=st.button("Scan")
+                print(f"predictionStatus: {isPredicting}, selected_option: {selected_option}")
+                if isPredicting: 
+                      if selected_option is None: st.error("Please select an option to scan the image.")
+        
+        if selected_option is not None and isPredicting:
+            st.info("Scanning...")
+            st.subheader("Results")
+            st.write("Results will be displayed here.")
 
-st.subheader("Results")
+st.subheader("How it works?")
