@@ -1,6 +1,12 @@
 import requests
 from bs4 import BeautifulSoup
-
+import pickle
+from tensorflow import keras
+import numpy as np
+import nltk
+import random
+import json
+from tensorflow.keras.preprocessing import sequence
 
 def getDoctorGeneralMedApollo(
         city: str = 'kolkata'
@@ -34,3 +40,34 @@ def getDoctorGeneralMedPracto(
     practo_webpage = requests.get(
         f'https://www.practo.com/search/doctors?results_type=doctor&q=%5B%7B%22word%22%3A%22General%20Physician%22%2C%22autocompleted%22%3Atrue%2C%22category%22%3A%22subspeciality%22%7D%5D&city={city}'
     ).text
+
+def getChatResponse(message: str):
+    with open('dataV1.pickle', 'rb') as f:
+        words, classes, training, output = pickle.load(f)
+    model= keras.models.load_model('chatbot_modelV1.h5')
+    intents= json.loads(open(r"chatbot_dataset_generalV1.json").read())
+    word_index = {word: index for index, word in enumerate(words)}
+    max_length = max(len(doc) for doc in training)
+
+    input_vector = bag_of_words(nltk.word_tokenize(message), word_index, max_length)
+    results = model.predict(np.array([input_vector]))[0]
+    results_index = np.argmax(results)
+    tag = classes[results_index]
+
+    for tg in intents['intents']:
+        if tg['tag'] == tag:
+            responses = tg['responses']
+    return {
+        'message': random.choice(responses)
+    }
+
+def bag_of_words(s, words, max_length): 
+    bag = [0 for _ in range(len(words))]
+    nltk.download('punkt')
+    lemmatizer= nltk.stem.WordNetLemmatizer()
+    nltk.download('wordnet')
+    word_index = {word: index for index, word in enumerate(words)}
+
+    word_indices = [word_index.get(lemmatizer.lemmatize(word.lower()), len(word_index)) for word in s]
+    padded_indices = sequence.pad_sequences([word_indices], maxlen=max_length, padding='post')[0]
+    return padded_indices

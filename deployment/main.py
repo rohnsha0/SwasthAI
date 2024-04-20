@@ -1,15 +1,18 @@
 from fastapi import FastAPI
-from mangum import Mangum
 import functions as fc
 
 app = FastAPI()
-handler = Mangum(app)
+#handler = Mangum(app)
 
 @app.get('/')
 async def homepage():
     return {
         'welcome': "title"
     }
+
+@app.get('/chat/{message}')
+async def chat(message: str):
+    return fc.getChatResponse(message)
 
 
 @app.get('/gen')
