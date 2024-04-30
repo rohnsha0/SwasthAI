@@ -1,6 +1,9 @@
 uvicorn==0.22.0
 fastapi==0.98.0
 beautifulsoup4==4.12.2
-mangum==0.17.0
 lxml==4.9.2
 requests==2.31.0
+nltk
+tensorflow
+numpy
+pandas

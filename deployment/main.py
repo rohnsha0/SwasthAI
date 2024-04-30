@@ -18,3 +18,7 @@ async def chat(message: str):
 @app.get('/gen')
 async def data():
     return fc.getDoctorGeneralMedApollo()
+
+@app.get('/symptoms/{symptom_sentence}')
+async def symptoms(symptom_sentence: str):
+    return fc.getAISymptomsResponse(symptom_sentence)
