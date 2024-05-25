@@ -2,9 +2,13 @@ from fastapi import FastAPI
 import functions as fc
 from fastapi.openapi.docs import get_swagger_ui_html
 from fastapi.openapi.models import Info
+import os
+from dotenv import load_dotenv
+import json
+import firebase_admin
+from firebase_admin import db
 
 app = FastAPI()
-#handler = Mangum(app)
 
 @app.get('/')
 async def homepage():
@@ -17,6 +21,20 @@ async def homepage():
 async def chat(message: str):
     return fc.getChatResponse(message)
 
+
+@app.get('/getUsername/{name}')
+async def get_username(name: str):
+    load_dotenv()
+    cred= json.loads(os.environ["FIREBASE_CREDENTIALS"])
+    cred1= firebase_admin.credentials.Certificate(cred)
+    if not firebase_admin._apps:
+        app=firebase_admin.initialize_app(cred1, {"databaseURL":"https://medbuddy-ai-default-rtdb.asia-southeast1.firebasedatabase.app/"})
+    ref= db.reference("users")
+    list= ref.get()
+    for user in list:
+        if name==list[user]['username']:
+            return list[user]
+    return "userNotFound"
 
 @app.get('/gen')
 async def data():

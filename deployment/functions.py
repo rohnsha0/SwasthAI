@@ -93,9 +93,9 @@ def getAISymptomsResponse(symptom_sentence: str):
 def getChatResponse(prompt: str):
     nltk.download('punkt')
     nltk.download('wordnet')
-    with open('dataV2.pickle', 'rb') as f:
+    with open('dataV3.pickle', 'rb') as f:
         word_index, classes, max_length = pickle.load(f)
-    interpreter = tf.lite.Interpreter(model_path='chat.tflite')
+    interpreter = tf.lite.Interpreter(model_path='chatV3.tflite')
     interpreter.allocate_tensors()
 
 # Get input and output tensors
