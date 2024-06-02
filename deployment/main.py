@@ -34,7 +34,11 @@ async def get_username(name: str):
     for user in list:
         if name==list[user]['username']:
             return list[user]
-    return "userNotFound"
+    return {
+        "firstName": None,
+        "lastName": None,
+        "username": None
+}
 
 @app.get('/gen')
 async def data():
