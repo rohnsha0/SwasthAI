@@ -1,8 +1,8 @@
-uvicorn==0.22.0
-fastapi==0.98.0
-beautifulsoup4==4.12.2
-lxml==4.9.2
-requests==2.31.0
+uvicorn
+fastapi
+beautifulsoup4
+lxml
+requests
 nltk
 tensorflow
 python-dotenv
