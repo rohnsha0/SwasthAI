@@ -1,4 +1,4 @@
-from fastapi import FastAPI
+from fastapi import FastAPI, File, UploadFile
 import functions as fc
 from fastapi.openapi.docs import get_swagger_ui_html
 from fastapi.openapi.models import Info
@@ -7,6 +7,9 @@ from dotenv import load_dotenv
 import json
 import firebase_admin
 from firebase_admin import db
+from fastapi.responses import JSONResponse
+from io import BytesIO
+#from PIL import Image
 
 app = FastAPI()
 
@@ -51,3 +54,17 @@ async def symptoms(symptom_sentence: str):
 @app.get('/next_symptom/{symptom_sentence}')
 async def next_symptom(symptom_sentence: str):
     return fc.getSymptomPredictionResponse(symptom_sentence)
+
+@app.post('/upload')
+async def decodeReport(file: UploadFile = File(...)):
+    try:
+        # Read the file into memory
+        #contents = await file.read()
+        #image = Image.open(BytesIO(contents))
+
+        # Perform analysis on the image
+        #analysis_result = analyze_image(image)
+
+        return JSONResponse(content={"message": "Image processed successfully", "analysis": "analysis_result"}, status_code=200)
+    except Exception as e:
+        return JSONResponse(content={"message": f"An error occurred: {str(e)}"}, status_code=500)
