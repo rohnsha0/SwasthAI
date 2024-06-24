@@ -59,12 +59,18 @@ async def next_symptom(symptom_sentence: str):
 async def decodeReport(file: UploadFile = File(...)):
     try:
         # Read the file into memory
-        #contents = await file.read()
+        contents = await file.read()
         #image = Image.open(BytesIO(contents))
 
         # Perform analysis on the image
         #analysis_result = analyze_image(image)
 
-        return JSONResponse(content={"message": "Image processed successfully", "analysis": "analysis_result"}, status_code=200)
+        return JSONResponse(
+            content={
+                "message": "Image processed successfully", 
+                "analysis": "analysis_result"
+            }, 
+            status_code=200
+        )
     except Exception as e:
         return JSONResponse(content={"message": f"An error occurred: {str(e)}"}, status_code=500)

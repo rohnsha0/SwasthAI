@@ -9,3 +9,4 @@ python-dotenv
 firebase_admin
 numpy
 pandas
+python-multipart
