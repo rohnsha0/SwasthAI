@@ -10,3 +10,10 @@ firebase_admin
 numpy
 pandas
 python-multipart
+langchain_community
+langchain
+boto3
+chromadb
+python-dotenv
+langchain_core
+huggingface_hub

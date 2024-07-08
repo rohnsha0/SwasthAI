@@ -1,15 +1,13 @@
 from fastapi import FastAPI, File, UploadFile
 import functions as fc
 from fastapi.openapi.docs import get_swagger_ui_html
-from fastapi.openapi.models import Info
 import os
 from dotenv import load_dotenv
 import json
 import firebase_admin
 from firebase_admin import db
 from fastapi.responses import JSONResponse
-from io import BytesIO
-#from PIL import Image
+import ragChat
 
 app = FastAPI()
 
@@ -22,7 +20,9 @@ async def homepage():
 
 @app.get('/chat/{message}')
 async def chat(message: str):
-    return fc.getChatResponse(message)
+    chatbot = ragChat.ragChat()
+    response= chatbot.get_response(message)
+    return {"message": response}
 
 
 @app.get('/getUsername/{name}')
