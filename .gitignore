@@ -4,3 +4,4 @@
 /env
 /deployment/__pycache__
 fbServiceAdmin.json
+.env
