@@ -1,6 +1,7 @@
 from fastapi import FastAPI, File, UploadFile
 import functions as fc
 from fastapi.openapi.docs import get_swagger_ui_html
+from fastapi.responses import JSONResponse
 import os
 from dotenv import load_dotenv
 import json
@@ -8,6 +9,7 @@ import firebase_admin
 from firebase_admin import db
 from fastapi.responses import JSONResponse
 import ragChat
+import re
 
 app = FastAPI()
 
@@ -18,12 +20,15 @@ async def homepage():
         title="SwasthAI API - Swagger UI",
     )
 
-@app.get('/chat/{message}')
-async def chat(message: str):
-    chatbot = ragChat.ragChat()
-    response= chatbot.get_response(message)
-    return {"message": response}
+@app.get('/chat/{serviceName}/{secretCode}/{message}')
+async def chat(serviceName:str, secretCode: str,message: str):
 
+    try:
+        chatbot = ragChat.ragChat(kwargs={"serviceName": serviceName, "secretCode": secretCode})
+        response= chatbot.get_response(message)
+        return JSONResponse(content={"message": response}, status_code=200)
+    except Exception as e:
+        return JSONResponse(content= {"error": str(e)}, status_code=401)
 
 @app.get('/getUsername/{name}')
 async def get_username(name: str):
@@ -74,3 +79,21 @@ async def decodeReport(file: UploadFile = File(...)):
         )
     except Exception as e:
         return JSONResponse(content={"message": f"An error occurred: {str(e)}"}, status_code=500)
+    
+
+    def parse_error_message(error_str):
+        try:
+            # Try to parse the error string as JSON
+            error_dict = json.loads(error_str)
+            if isinstance(error_dict, dict) and 'error' in error_dict:
+                return error_dict['error']['message']
+        except json.JSONDecodeError:
+            pass
+
+        # If JSON parsing fails, use regex to extract the message
+        match = re.search(r"'message': '(.+?)'", error_str)
+        if match:
+            return match.group(1)
+
+        # If all else fails, return the original error string
+        return error_str

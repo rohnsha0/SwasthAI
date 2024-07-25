@@ -17,3 +17,5 @@ chromadb
 python-dotenv
 langchain_core
 huggingface_hub
+langchain_google_genai
+langchain_openai

@@ -4,13 +4,23 @@ import os
 import boto3
 from langchain_community.embeddings.bedrock import BedrockEmbeddings
 from langchain_community.llms import Bedrock
+from langchain_openai import ChatOpenAI
 from langchain.prompts import PromptTemplate
 from langchain.chains import LLMChain
+import openai
+from langchain_openai import OpenAIEmbeddings
+from langchain_google_genai import ChatGoogleGenerativeAI, GoogleGenerativeAIEmbeddings
+from langchain_anthropic import ChatAnthropic
+
 
 class ragChat:
 
-    def __init__(self):
+    def __init__(self, kwargs= None):
+        self.errorMessage= ""
         load_dotenv()
+        self.SERVICE_NAME= kwargs.get("serviceName", "swasthai")
+        self.SECRET_CODE= kwargs.get("secretCode")
+        print(kwargs.get("serviceName", "swasthai"))
         os.environ['AWS_DEFAULT_REGION'] = 'ca-central-1'
         self.CHROMA_PATH = "chromaPathology-Copy1"
         self.bedrock= boto3.client('bedrock-runtime', aws_access_key_id= os.environ['ACCESS'], aws_secret_access_key=os.environ['SECRET'])
@@ -47,9 +57,10 @@ My response:
     
     def get_embedding_function(self):
         return BedrockEmbeddings(client=self.bedrock, model_id="amazon.titan-embed-text-v2:0")
-
-    def generateReply(self, context_text, query_text) -> str:
-        llm = Bedrock(
+    
+    def get_llm(self):
+        if self.SERVICE_NAME == "swasthai":
+            return Bedrock(
             model_id="amazon.titan-text-lite-v1",
             client=self.bedrock,
             model_kwargs={
@@ -59,6 +70,31 @@ My response:
                 "topP": 1,
             }
         )
+        if self.SERVICE_NAME=="openai":
+            return ChatOpenAI(
+            api_key=self.SECRET_CODE,
+            model="gpt-4o-mini",
+            )
+        
+        if self.SERVICE_NAME=="google":
+            return ChatGoogleGenerativeAI(google_api_key=self.SECRET_CODE, model="gemini-1.5-flash")
+        
+        if self.SERVICE_NAME=="anthropic":
+            return ChatAnthropic(api_key=self.SECRET_CODE, model="claude-3-haiku-20240307")
+
+        return Bedrock(
+            model_id="amazon.titan-text-lite-v1",
+            client=self.bedrock,
+            model_kwargs={
+                "maxTokenCount": 1000,
+                "stopSequences": [],
+                "temperature": 0.7,
+                "topP": 1,
+            }
+        )
+
+    def generateReply(self, context_text, query_text) -> str:
+        llm = self.get_llm()
         prompt = PromptTemplate(
             input_variables=["context", "question"],
             template=self.PROMPT_TEMPLATE
@@ -66,5 +102,3 @@ My response:
         chain = LLMChain(llm=llm, prompt=prompt)
         response = chain.run(context=context_text, question=query_text)
         return response
-    
-    
