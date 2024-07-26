@@ -19,3 +19,6 @@ langchain_core
 huggingface_hub
 langchain_google_genai
 langchain_openai
+langchain_anthropic
+google-generativeai
+openai

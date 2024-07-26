@@ -9,6 +9,7 @@ import firebase_admin
 from firebase_admin import db
 from fastapi.responses import JSONResponse
 import ragChat
+import verifyResults
 import re
 
 app = FastAPI()
@@ -20,13 +21,43 @@ async def homepage():
         title="SwasthAI API - Swagger UI",
     )
 
-@app.get('/chat/{serviceName}/{secretCode}/{message}')
-async def chat(serviceName:str, secretCode: str,message: str):
-
+@app.post('/chat/')
+async def chat(serviceName:str, secretCode: str, message: str):
     try:
         chatbot = ragChat.ragChat(kwargs={"serviceName": serviceName, "secretCode": secretCode})
         response= chatbot.get_response(message)
         return JSONResponse(content={"message": response}, status_code=200)
+    except Exception as e:
+        return JSONResponse(content= {"error": str(e)}, status_code=401)
+    
+@app.post("/verifyResults")
+async def verifyResultsa(
+    diseaseName: str = None,
+    serviceName: str = None,
+    secretCode: str = None,
+    file: UploadFile = File(...),
+):
+    try:
+        verifier= verifyResults.verifyScanResult(diseaseName=diseaseName, serviceName=serviceName, secretCode=secretCode)
+
+        file_location = f"temp_files/{file.filename}"
+        os.makedirs(os.path.dirname(file_location), exist_ok=True)
+        
+        with open(file_location, "wb") as f:
+            f.write(await file.read())
+         
+        match serviceName:
+            case "google":
+                 result= verifier.verifyResultsGoogle(file_location)
+            case "openai":
+                result=  verifier.verifyResultsOpenAI(file_location)
+            case _:
+                result=  JSONResponse(content= {"error": "Invalid service name"}, status_code=401)
+
+        print(result)
+        os.remove(file_location)
+        return JSONResponse(content=result, status_code=200)
+ 
     except Exception as e:
         return JSONResponse(content= {"error": str(e)}, status_code=401)
 
