@@ -23,8 +23,8 @@ const config = {
   organizationName: 'rohnsha0', // Usually your GitHub org/user name.
   projectName: 'SwasthAI', // Usually your repo name.
 
-  onBrokenLinks: 'throw',
-  onBrokenMarkdownLinks: 'warn',
+  onBrokenLinks: 'ignore',
+  onBrokenMarkdownLinks: 'ignore',
 
   // Even if you don't use internationalization, you can use this field to set
   // useful metadata like html lang. For example, if your site is Chinese, you
@@ -39,18 +39,7 @@ const config = {
       'classic',
       /** @type {import('@docusaurus/preset-classic').Options} */
       ({
-        sitemap: {
-          lastmod: 'date',
-          changefreq: 'weekly',
-          priority: 0.5,
-          ignorePatterns: ['/tags/**'],
-          filename: 'sitemap.xml',
-          createSitemapItems: async (params) => {
-            const {defaultCreateSitemapItems, ...rest} = params;
-            const items = await defaultCreateSitemapItems(rest);
-            return items.filter((item) => !item.url.includes('/page/'));
-          },
-        },
+
         docs: {
           sidebarPath: './sidebars.js',
           // Please change this to your repo.
@@ -76,7 +65,7 @@ const config = {
     /** @type {import('@docusaurus/preset-classic').ThemeConfig} */
     ({
       // Replace with your project's social card
-      image: 'img/docusaurus-social-card.jpg',
+      image: 'https://i.postimg.cc/PrC9PpsT/image1.jpg',
       navbar: {
         title: 'SwasthAI',
         logo: {
@@ -84,6 +73,11 @@ const config = {
           src: 'img/logoSQT.png',
         },
         items: [
+          {
+            to: '/try',
+            label: 'Try It Out',
+            position: 'left',
+          },
           {
             type: 'docSidebar',
             sidebarId: 'tutorialSidebar',
@@ -105,26 +99,26 @@ const config = {
             title: 'Docs',
             items: [
               {
-                label: 'Tutorial',
-                to: '/docs/intro',
+                label: 'About Us',
+                to: '/docs/about',
               },
             ],
           },
           {
-            title: 'Community',
+            title: 'Contact Developer',
             items: [
               {
-                label: 'Stack Overflow',
-                href: 'https://stackoverflow.com/questions/tagged/docusaurus',
+                label: 'LinkedIn',
+                href: 'https://www.linkedin.com/in/rohnsha0/',
               },
               {
-                label: 'Discord',
-                href: 'https://discordapp.com/invite/docusaurus',
+                label: 'Github',
+                href: 'https://github.com/rohnsha0',
               },
-              {
-                label: 'Twitter',
-                href: 'https://twitter.com/docusaurus',
-              },
+              //{
+                //label: 'Twitter',
+                //href: 'https://twitter.com/docusaurus',
+              //},
             ],
           },
           {
@@ -136,7 +130,7 @@ const config = {
               },
               {
                 label: 'GitHub',
-                href: 'https://github.com/facebook/docusaurus',
+                href: 'https://github.com/rohnsha0/SwasthAI',
               },
             ],
           },

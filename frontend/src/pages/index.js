@@ -19,8 +19,8 @@ function HomepageHeader() {
         <div className={styles.buttons}>
           <Link
             className="button button--secondary button--lg"
-            to="https://github.com/rohnsha0/SwasthAI-androidApp">
-            Download SwasthAI - Android App
+            to="https://play.google.com/store/apps/details?id=com.rohnsha.medbuddy">
+            Download Android App
           </Link>
         </div>
       </div>
