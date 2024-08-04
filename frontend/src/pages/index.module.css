@@ -16,6 +16,10 @@
   }
 }
 
+.txtClr {
+  color: var(--ifm-font-color-base);
+}
+
 .buttons {
   display: flex;
   align-items: center;
